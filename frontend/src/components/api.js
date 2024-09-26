@@ -1,57 +1,53 @@
+
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode}  from 'jwt-decode';
 
-
-// Check if the token is expired
-const isTokenExpired = (token) => {
-  if (!token) return true;
-  const { exp } = jwtDecode(token);
-  const now = Math.floor(Date.now() / 1000);  // Current time in seconds
-  return exp < now;
+// Function to handle logout by clearing tokens
+export const handleLogout = () => {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  // Optionally, clear other user-related data
 };
 
-// Refresh the access token using the refresh token
+// Function to check if the token is expired
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  try {
+    const { exp } = jwtDecode(token);
+    const now = Math.floor(Date.now() / 1000);
+    return exp < now;
+  } catch (error) {
+    console.error('Invalid token:', error);
+    return true;
+  }
+};
+
+// Function to refresh the access token using the refresh token
 export const refreshToken = async () => {
   try {
     const refresh = localStorage.getItem('refresh_token');
+    if (!refresh) {
+      handleLogout();
+      return null;
+    }
     const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
       refresh,
     });
     const { access } = response.data;
-    localStorage.setItem('access_token', access);  // Store new access token
+    localStorage.setItem('access_token', access);
     return access;
   } catch (error) {
     console.error('Failed to refresh access token:', error);
+    handleLogout(); // Clear tokens
     return null;
   }
 };
 
-// Get the access token, refresh if necessary
+// Function to get a valid access token, refreshing it if necessary
 export const getAuthToken = async () => {
   let accessToken = localStorage.getItem('access_token');
-  if (isTokenExpired(accessToken)) {
+  if (!accessToken || isTokenExpired(accessToken)) {
     accessToken = await refreshToken();
   }
   return accessToken;
 };
-
-
-
-const fetchExpenses = async () => {
-    const accessToken = await getAuthToken();
-    if (!accessToken) {
-      console.error('Unable to get access token.');
-      return;
-    }
-  
-    try {
-      const response = await axios.get('http://127.0.0.1:8000/api/expenses/', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error fetching expenses:', error);
-    }
-  };
