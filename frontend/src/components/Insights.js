@@ -1,9 +1,22 @@
 // src/components/Insights.js
 import React, { useEffect, useState } from 'react';
-import { getAuthToken } from './api';
+import { getAuthToken, handleLogout } from './api';
 import axios from 'axios';
 import { Line, Pie } from 'react-chartjs-2';
-import { Card, CardContent, Typography, Grid, Container } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Container,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,7 +29,6 @@ import {
   Legend,
 } from 'chart.js';
 
-// Register the required components for Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,12 +46,16 @@ function Insights() {
   const [totalWeekly, setTotalWeekly] = useState(0);
   const [totalDaily, setTotalDaily] = useState(0);
   const [budget, setBudget] = useState(null);
+  const [timeframe, setTimeframe] = useState('monthly');
+  const [lineChartData, setLineChartData] = useState({ labels: [], datasets: [] });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       const token = await getAuthToken();
       if (!token) {
-        window.location.href = '/';
+        handleLogout();
+        navigate('/login');
         return;
       }
 
@@ -52,6 +68,7 @@ function Insights() {
         });
         setExpenses(expensesResponse.data);
         calculateTotals(expensesResponse.data);
+        updateLineChartData(expensesResponse.data, timeframe);
 
         // Fetch budget
         const budgetResponse = await axios.get('http://127.0.0.1:8000/api/budgets/', {
@@ -64,11 +81,15 @@ function Insights() {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+        if (error.response && error.response.status === 401) {
+          handleLogout();
+          navigate('/login');
+        }
       }
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const calculateTotals = (expensesData) => {
     const today = new Date();
@@ -81,7 +102,10 @@ function Insights() {
       const timeDiff = today - expenseDate;
       const dayDiff = timeDiff / (1000 * 3600 * 24);
 
-      if (expenseDate.getMonth() === today.getMonth() && expenseDate.getFullYear() === today.getFullYear()) {
+      if (
+        expenseDate.getMonth() === today.getMonth() &&
+        expenseDate.getFullYear() === today.getFullYear()
+      ) {
         monthlyTotal += parseFloat(expense.amount);
       }
       if (dayDiff <= 7) {
@@ -97,24 +121,59 @@ function Insights() {
     setTotalDaily(dailyTotal);
   };
 
-  // Prepare data for the line chart (Expense History)
-  const lineChartData = {
-    labels: expenses.map((expense) => expense.date),
-    datasets: [
-      {
-        label: 'Expenses Over Time',
-        data: expenses.map((expense) => expense.amount),
-        fill: false,
-        borderColor: '#3f51b5',
-      },
-    ],
+  const updateLineChartData = (expensesData, selectedTimeframe) => {
+    const groupedData = {};
+    expensesData.forEach((expense) => {
+      const expenseDate = new Date(expense.date);
+      let key;
+      switch (selectedTimeframe) {
+        case 'daily':
+          key = expenseDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+          break;
+        case 'monthly':
+          key = `${expenseDate.getFullYear()}-${expenseDate.getMonth() + 1}`; // 'YYYY-M'
+          break;
+        case 'yearly':
+          key = `${expenseDate.getFullYear()}`; // 'YYYY'
+          break;
+        default:
+          key = expenseDate.toISOString().split('T')[0];
+      }
+
+      if (groupedData[key]) {
+        groupedData[key] += parseFloat(expense.amount);
+      } else {
+        groupedData[key] = parseFloat(expense.amount);
+      }
+    });
+
+    const sortedKeys = Object.keys(groupedData).sort();
+    const data = sortedKeys.map((key) => groupedData[key]);
+
+    setLineChartData({
+      labels: sortedKeys,
+      datasets: [
+        {
+          label: 'Expenses',
+          data: data,
+          fill: false,
+          borderColor: '#3f51b5',
+        },
+      ],
+    });
+  };
+
+  const handleTimeframeChange = (event) => {
+    setTimeframe(event.target.value);
+    updateLineChartData(expenses, event.target.value);
   };
 
   // Prepare data for the pie chart (Expenses by Category)
   const categoryData = {};
   expenses.forEach((expense) => {
     if (expense.category) {
-      categoryData[expense.category] = (categoryData[expense.category] || 0) + parseFloat(expense.amount);
+      categoryData[expense.category] =
+        (categoryData[expense.category] || 0) + parseFloat(expense.amount);
     }
   });
 
@@ -129,7 +188,7 @@ function Insights() {
   };
 
   return (
-    <div>
+    <Container>
       <Typography variant="h4" gutterBottom>
         Insights
       </Typography>
@@ -178,26 +237,56 @@ function Insights() {
         </Grid>
       </Grid>
 
-      {/* Expense History Chart */}
-      <Card style={{ marginTop: '20px' }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Expense History
-          </Typography>
-          <Line data={lineChartData} />
-        </CardContent>
-      </Card>
+      {/* Charts */}
+      <Grid container spacing={3} style={{ marginTop: '20px' }}>
+        {/* Expense History Chart */}
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent style={{ height: '400px' }}>
+              <Typography variant="h6" gutterBottom>
+                Expense History
+              </Typography>
+              <FormControl variant="outlined" style={{ minWidth: 120, marginBottom: '20px' }}>
+                <InputLabel id="timeframe-label">Timeframe</InputLabel>
+                <Select
+                  labelId="timeframe-label"
+                  value={timeframe}
+                  onChange={handleTimeframeChange}
+                  label="Timeframe"
+                >
+                  <MenuItem value="daily">Daily</MenuItem>
+                  <MenuItem value="monthly">Monthly</MenuItem>
+                  <MenuItem value="yearly">Yearly</MenuItem>
+                </Select>
+              </FormControl>
+              <div style={{ height: '300px' }}>
+                <Line
+                  data={lineChartData}
+                  options={{ responsive: true, maintainAspectRatio: false }}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      {/* Expenses by Category Pie Chart */}
-      <Card style={{ marginTop: '20px' }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Expenses by Category
-          </Typography>
-          <Pie data={pieChartData} />
-        </CardContent>
-      </Card>
-    </div>
+        {/* Expenses by Category Pie Chart */}
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent style={{ height: '400px' }}>
+              <Typography variant="h6" gutterBottom>
+                Expenses by Category
+              </Typography>
+              <div style={{ height: '300px' }}>
+                <Pie
+                  data={pieChartData}
+                  options={{ responsive: true, maintainAspectRatio: false }}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 
