@@ -17,10 +17,10 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from .models import Expense, Budget
-from .serializers import ExpenseSerializer, BudgetSerializer
+from .models import Expense, Budget, RecurringExpense
+from .serializers import ExpenseSerializer, BudgetSerializer, RecurringExpenseSerializer
 
 class BudgetViewSet(viewsets.ModelViewSet):
     queryset = Budget.objects.all()
@@ -32,3 +32,17 @@ class BudgetViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class RecurringExpenseViewSet(viewsets.ModelViewSet):
+    queryset = RecurringExpense.objects.all()
+    serializer_class = RecurringExpenseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return RecurringExpense.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+

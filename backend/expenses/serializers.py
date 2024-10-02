@@ -15,3 +15,11 @@ class BudgetSerializer(serializers.ModelSerializer):
         model = Budget
         fields = ['id', 'user', 'amount']
         read_only_fields = ['user']
+
+from .models import RecurringExpense
+
+class RecurringExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecurringExpense
+        fields = '__all__'
+        read_only_fields = ('user',)
