@@ -122,51 +122,52 @@ An advanced full-stack expense tracking application designed to help users manag
 
 ### Project Structure
 
-    expense-tracker/
-├── backend/
-│   ├── expenses/
-│   │   ├── migrations/
-│   │   ├── management/
-│   │   │   └── commands/
-│   │   │       └── generate_recurring_expenses.py
-│   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── urls.py
-│   │   └── views.py
-│   ├── expense_tracker/
-│   │   ├── __init__.py
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   ├── db.sqlite3
-│   ├── manage.py
-│   └── requirements.txt
-├── frontend/
-│   ├── public/
-│   │   └── index.html
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── AddExpense.js
-│   │   │   ├── AddRecurringExpense.js
-│   │   │   ├── Budget.js
-│   │   │   ├── BudgetRecommendations.js
-│   │   │   ├── ExpenseList.js
-│   │   │   ├── Insights.js
-│   │   │   ├── Login.js
-│   │   │   ├── RecurringExpenseList.js
-│   │   │   └── Register.js
-│   │   ├── auth.js
-│   │   ├── App.js
-│   │   ├── index.js
-│   │   ├── theme.js
-│   │   └── ...
-│   ├── package.json
-│   └── package-lock.json
-└── README.md
-
+    ```java
+        expense-tracker/
+    ├── backend/
+    │   ├── expenses/
+    │   │   ├── migrations/
+    │   │   ├── management/
+    │   │   │   └── commands/
+    │   │   │       └── generate_recurring_expenses.py
+    │   │   ├── __init__.py
+    │   │   ├── admin.py
+    │   │   ├── apps.py
+    │   │   ├── models.py
+    │   │   ├── serializers.py
+    │   │   ├── urls.py
+    │   │   └── views.py
+    │   ├── expense_tracker/
+    │   │   ├── __init__.py
+    │   │   ├── settings.py
+    │   │   ├── urls.py
+    │   │   └── wsgi.py
+    │   ├── db.sqlite3
+    │   ├── manage.py
+    │   └── requirements.txt
+    ├── frontend/
+    │   ├── public/
+    │   │   └── index.html
+    │   ├── src/
+    │   │   ├── components/
+    │   │   │   ├── AddExpense.js
+    │   │   │   ├── AddRecurringExpense.js
+    │   │   │   ├── Budget.js
+    │   │   │   ├── BudgetRecommendations.js
+    │   │   │   ├── ExpenseList.js
+    │   │   │   ├── Insights.js
+    │   │   │   ├── Login.js
+    │   │   │   ├── RecurringExpenseList.js
+    │   │   │   │── Register.js
+    │   │   │   └── api.js  
+    │   │   ├── App.js
+    │   │   ├── index.js
+    │   │   ├── theme.js
+    │   │   └── ...
+    │   ├── package.json
+    │   └── package-lock.json
+    └── README.md
+    ```
 
 ## Using/Testing the Application
 

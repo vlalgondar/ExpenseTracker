@@ -7,6 +7,8 @@ import ExpenseList from './components/ExpenseList';
 import AddExpense from './components/AddExpense';
 import Insights from './components/Insights';
 import Budget from './components/Budget';
+import AddRecurringExpense from './components/AddRecurringExpense';
+import RecurringExpenseList from './components/RecurringExpenseList';
 import { getAuthToken, handleLogout } from './components/api';
 
 function App() {
@@ -53,6 +55,12 @@ function App() {
                   <Button color="primary" component={Link} to="/add-expense">
                     Add Expense
                   </Button>
+                  <Button color="primary" component={Link} to="/recurring-expenses">
+                    Recurring Expenses
+                  </Button>
+                  <Button color="primary" component={Link} to="/add-recurring-expense">
+                    Add Recurring Expense
+                  </Button>
                   <Button color="primary" component={Link} to="/insights">
                     Insights
                   </Button>
@@ -73,6 +81,8 @@ function App() {
                 <Route path="/budget" element={<Budget />} />
                 <Route path="/" element={<Navigate to="/expenses" />} />
                 <Route path="*" element={<Navigate to="/expenses" />} />
+                <Route path="/recurring-expenses" element={<RecurringExpenseList />} />
+                <Route path="/add-recurring-expense" element={<AddRecurringExpense />} />
               </Routes>
             </Container>
           </>
