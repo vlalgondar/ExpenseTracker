@@ -52,21 +52,24 @@ function ExpenseList() {
     fetchExpenses();
   }, [navigate]);
 
-  const handleSort = () => {
-    const sortedExpenses = [...filteredExpenses].sort((a, b) => {
+  const handleFilterAndSort = () => {
+    let updatedExpenses = expenses;
+
+    // Filter by category
+    if (filterCategory) {
+      updatedExpenses = updatedExpenses.filter(
+        (expense) => expense.category === filterCategory
+      );
+    }
+
+    // Sort by date
+    updatedExpenses.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
       return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
-    setFilteredExpenses(sortedExpenses);
-  };
 
-  const handleFilter = () => {
-    const filtered = expenses.filter((expense) =>
-      filterCategory ? expense.category === filterCategory : true
-    );
-    setFilteredExpenses(filtered);
-    handleSort();
+    setFilteredExpenses(updatedExpenses);
   };
 
   const handleReset = () => {
@@ -74,11 +77,6 @@ function ExpenseList() {
     setFilterCategory('');
     setSortOrder('desc');
   };
-
-  useEffect(() => {
-    handleFilter();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortOrder, filterCategory]);
 
   return (
     <Container>
@@ -101,11 +99,13 @@ function ExpenseList() {
                 <em>All</em>
               </MenuItem>
               {/* Map through unique categories */}
-              {[...new Set(expenses.map((expense) => expense.category))].map((category) => (
-                <MenuItem value={category} key={category}>
-                  {category}
-                </MenuItem>
-              ))}
+              {[...new Set(expenses.map((expense) => expense.category))].map(
+                (category) => (
+                  <MenuItem value={category} key={category}>
+                    {category}
+                  </MenuItem>
+                )
+              )}
             </Select>
           </FormControl>
         </Grid>
@@ -125,9 +125,22 @@ function ExpenseList() {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} sm={4} style={{ display: 'flex', alignItems: 'center' }}>
-          <Button variant="contained" color="primary" onClick={handleReset} fullWidth>
-            Reset Filters
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleFilterAndSort}
+            fullWidth
+          >
+            Apply Filters
+          </Button>
+          <Button variant="outlined" onClick={handleReset} fullWidth>
+            Reset
           </Button>
         </Grid>
       </Grid>

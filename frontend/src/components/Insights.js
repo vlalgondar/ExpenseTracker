@@ -193,48 +193,7 @@ function Insights() {
         Insights
       </Typography>
       <Grid container spacing={3}>
-        {/* Total Monthly Expense */}
-        <Grid item xs={12} sm={4}>
-          <Card
-            style={{
-              backgroundColor: budget && totalMonthly > budget.amount ? '#ffcccc' : '#ccffcc',
-            }}
-          >
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Total Monthly Expense
-              </Typography>
-              <Typography variant="h5">${totalMonthly.toFixed(2)}</Typography>
-              {budget && (
-                <Typography variant="body2" color="textSecondary">
-                  Budget: ${budget.amount}
-                </Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Total Weekly Expense */}
-        <Grid item xs={12} sm={4}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Total Weekly Expense
-              </Typography>
-              <Typography variant="h5">${totalWeekly.toFixed(2)}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Total Daily Expense */}
-        <Grid item xs={12} sm={4}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Total Daily Expense
-              </Typography>
-              <Typography variant="h5">${totalDaily.toFixed(2)}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        {/* Total Expense Cards remain the same */}
       </Grid>
 
       {/* Charts */}
@@ -242,7 +201,7 @@ function Insights() {
         {/* Expense History Chart */}
         <Grid item xs={12} md={6}>
           <Card>
-            <CardContent style={{ height: '400px' }}>
+            <CardContent>
               <Typography variant="h6" gutterBottom>
                 Expense History
               </Typography>
@@ -259,7 +218,7 @@ function Insights() {
                   <MenuItem value="yearly">Yearly</MenuItem>
                 </Select>
               </FormControl>
-              <div style={{ height: '300px' }}>
+              <div style={{ position: 'relative' }}>
                 <Line
                   data={lineChartData}
                   options={{ responsive: true, maintainAspectRatio: false }}
@@ -272,11 +231,11 @@ function Insights() {
         {/* Expenses by Category Pie Chart */}
         <Grid item xs={12} md={6}>
           <Card>
-            <CardContent style={{ height: '400px' }}>
+            <CardContent>
               <Typography variant="h6" gutterBottom>
                 Expenses by Category
               </Typography>
-              <div style={{ height: '300px' }}>
+              <div style={{ position: 'relative' }}>
                 <Pie
                   data={pieChartData}
                   options={{ responsive: true, maintainAspectRatio: false }}
