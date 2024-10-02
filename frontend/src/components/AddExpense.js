@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { getAuthToken, handleLogout } from './api';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Card, CardContent, Grid } from '@mui/material';
+import { TextField, Button, Typography, Card, CardContent, Grid, Container } from '@mui/material';
 
 function AddExpense() {
   const [description, setDescription] = useState('');
@@ -52,7 +52,7 @@ function AddExpense() {
   };
 
   return (
-    <div>
+    <Container>
       <Typography variant="h4" gutterBottom>
         Add Expense
       </Typography>
@@ -69,7 +69,7 @@ function AddExpense() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label="Amount"
                   type="number"
@@ -79,7 +79,7 @@ function AddExpense() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label="Date"
                   type="date"
@@ -109,7 +109,7 @@ function AddExpense() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </Container>
   );
 }
 
