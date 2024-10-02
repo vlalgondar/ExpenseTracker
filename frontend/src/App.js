@@ -10,6 +10,7 @@ import Budget from './components/Budget';
 import AddRecurringExpense from './components/AddRecurringExpense';
 import RecurringExpenseList from './components/RecurringExpenseList';
 import { getAuthToken, handleLogout } from './components/api';
+import Register from './components/Register';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
@@ -89,6 +90,7 @@ function App() {
         ) : (
           <Routes>
             <Route path="/login" element={<Login onLogin={() => setIsLoggedIn(true)} />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         )}

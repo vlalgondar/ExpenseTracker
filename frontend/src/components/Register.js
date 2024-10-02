@@ -1,53 +1,60 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Typography, Card, CardContent, Grid } from '@mui/material';
+import { TextField, Button, Typography, Card, CardContent, Grid, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-function Login({ onLogin }) {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+      await axios.post('http://127.0.0.1:8000/api/register/', {
         username,
         password,
+        email,
       });
-      const { access, refresh } = response.data;
-      localStorage.setItem('access_token', access);
-      localStorage.setItem('refresh_token', refresh);
-      onLogin();
+      // Redirect to login page
+      navigate('/login');
     } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMessage('Invalid username or password');
+      console.error('Registration failed:', error);
+      setErrorMessage('Registration failed. Please try again.');
     }
   };
 
   return (
-    <div>
+    <Container>
       <Typography variant="h4" gutterBottom>
-        Login
+        Sign Up
       </Typography>
       <Card>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {errorMessage && (
-                  <Typography color="error" variant="body2">
-                    {errorMessage}
-                  </Typography>
-                )}
-              </Grid>
+              {errorMessage && (
+                <Grid item xs={12}>
+                  <Typography color="error">{errorMessage}</Typography>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField
                   label="Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   fullWidth
                 />
@@ -64,23 +71,23 @@ function Login({ onLogin }) {
               </Grid>
               <Grid item xs={12}>
                 <Button variant="contained" color="primary" type="submit">
-                  Login
-                </Button>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body2">
-                Don't have an account?{' '}
-                <Button color="primary" onClick={() => navigate('/register')}>
                   Sign Up
                 </Button>
-              </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  Already have an account?{' '}
+                  <Button color="primary" onClick={() => navigate('/login')}>
+                    Login
+                  </Button>
+                </Typography>
+              </Grid>
             </Grid>
           </form>
         </CardContent>
       </Card>
-    </div>
+    </Container>
   );
 }
 
-export default Login;
+export default Register;
