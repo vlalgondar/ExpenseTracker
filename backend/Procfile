@@ -1,1 +1,1 @@
-web: gunicorn /opt/render/project/src/backend/expense_tracker/wsgi --log-file -
+web: gunicorn expense_tracker.wsgi --log-file -
