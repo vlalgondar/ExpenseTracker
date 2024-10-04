@@ -24,7 +24,7 @@ function AddExpense() {
 
     try {
       await axios.post(
-        '${API_URL}/api/expenses/',
+        `${API_URL}/api/expenses/`,
         {
           description,
           amount,

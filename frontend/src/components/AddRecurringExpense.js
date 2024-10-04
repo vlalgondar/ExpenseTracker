@@ -36,7 +36,7 @@ function AddRecurringExpense() {
 
     try {
       await axios.post(
-        '${API_URL}/api/recurring-expenses/',
+        `${API_URL}/api/recurring-expenses/`,
         {
           description,
           amount,

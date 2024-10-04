@@ -33,7 +33,7 @@ function ExpenseList() {
       }
 
       try {
-        const response = await axios.get('${API_URL}/api/expenses/', {
+        const response = await axios.get(`${API_URL}/api/expenses/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -63,7 +63,7 @@ function Insights() {
 
       try {
         // Fetch expenses
-        const expensesResponse = await axios.get('${API_URL}/api/expenses/', {
+        const expensesResponse = await axios.get(`${API_URL}/api/expenses/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +73,7 @@ function Insights() {
         updateLineChartData(expensesResponse.data, timeframe);
 
         // Fetch budget
-        const budgetResponse = await axios.get('${API_URL}/api/budgets/', {
+        const budgetResponse = await axios.get(`${API_URL}/api/budgets/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

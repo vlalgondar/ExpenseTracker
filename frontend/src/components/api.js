@@ -31,7 +31,7 @@ export const refreshToken = async () => {
       handleLogout();
       return null;
     }
-    const response = await axios.post('${API_URL}/api/token/refresh/', {
+    const response = await axios.post(`${API_URL}/api/token/refresh/`, {
       refresh,
     });
     const { access } = response.data;

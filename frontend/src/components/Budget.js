@@ -17,7 +17,7 @@ function Budget() {
       }
 
       try {
-        const response = await axios.get('${API_URL}/api/budgets/', {
+        const response = await axios.get(`${API_URL}/api/budgets/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -51,7 +51,7 @@ function Budget() {
         });
       } else {
         // Create new budget
-        const response = await axios.post('${API_URL}/api/budgets/', { amount }, {
+        const response = await axios.post(`${API_URL}/api/budgets/`, { amount }, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -7,6 +7,7 @@ import { Typography, Grid, Card, CardContent, Container, Button } from '@mui/mat
 function RecurringExpenseList() {
   const [recurringExpenses, setRecurringExpenses] = useState([]);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000"; 
 
   useEffect(() => {
     const fetchRecurringExpenses = async () => {
@@ -18,7 +19,7 @@ function RecurringExpenseList() {
       }
 
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/recurring-expenses/', {
+        const response = await axios.get(`${API_URL}/api/recurring-expenses/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
