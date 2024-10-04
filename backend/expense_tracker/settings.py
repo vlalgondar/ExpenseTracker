@@ -67,7 +67,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
-ROOT_URLCONF = "backend.urls"
+ROOT_URLCONF = "expense_tracker.urls"
 
 TEMPLATES = [
     {
@@ -85,7 +85,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "backend.wsgi.application"
+WSGI_APPLICATION = "expense_tracker.wsgi.application"
 
 
 # Database
