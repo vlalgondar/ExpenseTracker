@@ -6,6 +6,7 @@ import { TextField, Button, Typography, Card, CardContent } from '@mui/material'
 function Budget() {
   const [budget, setBudget] = useState(null);
   const [amount, setAmount] = useState('');
+  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000"; 
 
   useEffect(() => {
     const fetchBudget = async () => {
@@ -16,7 +17,7 @@ function Budget() {
       }
 
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/budgets/', {
+        const response = await axios.get('${API_URL}/api/budgets/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,14 +44,14 @@ function Budget() {
     try {
       if (budget) {
         // Update existing budget
-        await axios.put(`http://127.0.0.1:8000/api/budgets/${budget.id}/`, { amount }, {
+        await axios.put(`${API_URL}/api/budgets/${budget.id}/`, { amount }, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       } else {
         // Create new budget
-        const response = await axios.post('http://127.0.0.1:8000/api/budgets/', { amount }, {
+        const response = await axios.post('${API_URL}/api/budgets/', { amount }, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

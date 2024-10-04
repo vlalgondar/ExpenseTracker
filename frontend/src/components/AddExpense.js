@@ -11,6 +11,7 @@ function AddExpense() {
   const [date, setDate] = useState('');
   const [category, setCategory] = useState('');
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000"; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ function AddExpense() {
 
     try {
       await axios.post(
-        'http://127.0.0.1:8000/api/expenses/',
+        '${API_URL}/api/expenses/',
         {
           description,
           amount,

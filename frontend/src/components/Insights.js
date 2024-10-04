@@ -49,6 +49,8 @@ function Insights() {
   const [timeframe, setTimeframe] = useState('monthly');
   const [lineChartData, setLineChartData] = useState({ labels: [], datasets: [] });
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000"; 
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +63,7 @@ function Insights() {
 
       try {
         // Fetch expenses
-        const expensesResponse = await axios.get('http://127.0.0.1:8000/api/expenses/', {
+        const expensesResponse = await axios.get('${API_URL}/api/expenses/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -71,7 +73,7 @@ function Insights() {
         updateLineChartData(expensesResponse.data, timeframe);
 
         // Fetch budget
-        const budgetResponse = await axios.get('http://127.0.0.1:8000/api/budgets/', {
+        const budgetResponse = await axios.get('${API_URL}/api/budgets/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

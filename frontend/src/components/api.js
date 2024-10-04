@@ -26,11 +26,12 @@ const isTokenExpired = (token) => {
 export const refreshToken = async () => {
   try {
     const refresh = localStorage.getItem('refresh_token');
+    const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000"; 
     if (!refresh) {
       handleLogout();
       return null;
     }
-    const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+    const response = await axios.post('${API_URL}/api/token/refresh/', {
       refresh,
     });
     const { access } = response.data;
