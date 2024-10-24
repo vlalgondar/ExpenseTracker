@@ -89,27 +89,27 @@ WSGI_APPLICATION = "expense_tracker.wsgi.application"
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'finance_manager',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Bayless0408',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
-import dj_database_url
-from decouple import config
+# # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'finance_manager',
+        'USER': 'postgres',
+        'PASSWORD': 'Bayless0408',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
+
+# import dj_database_url
+# from decouple import config
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL')
+#     )
+# }
 
 
 # Password validation
