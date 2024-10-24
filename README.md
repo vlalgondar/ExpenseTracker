@@ -79,6 +79,8 @@ An advanced full-stack expense tracking application designed to help users manag
 
 ### Backend Setup
 
+#### Navigate to new-develop branch once cloned
+
 1. **Clone the Repository**:
 
    ```bash
